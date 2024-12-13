@@ -37,7 +37,7 @@ namespace CapaDatos
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                     usuarios = new List<Rol>();

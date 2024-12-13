@@ -53,7 +53,7 @@ namespace SistemaVentas
                 dgvData.Rows.Add(new object[]
                 {
                 "",
-               item.IdUsuario,
+                item.IdUsuario,
                 item.Documento,
                 item.NombreCompleto,
                 item.Correo,
@@ -70,20 +70,42 @@ namespace SistemaVentas
 
         private void BtnGuardar_Click(object sender, EventArgs e)
         {
-            dgvData.Rows.Add(new object[] 
+            string mensaje = string.Empty;
+            Usuario usuario = new Usuario()
             {
-                "",
-                TxtIdUsario.Text,
-                TxtDocumento.Text,
-                TxtNombreCompleto.Text,
-                txtCorreo.Text,
-                TxtClave.Text,
-                ((OpcionCombo)CmbRol.SelectedItem).Valor.ToString(),
-                ((OpcionCombo)CmbRol.SelectedItem).Texto.ToString(),
-                ((OpcionCombo)CmbEstado.SelectedItem).Valor.ToString(),
-                ((OpcionCombo)CmbEstado.SelectedItem).Texto.ToString()
+                IdUsuario = Convert.ToInt32(TxtIdUsario.Text),
+                Documento = TxtDocumento.Text,
+                NombreCompleto = TxtNombreCompleto.Text,
+                Correo = txtCorreo.Text,
+                Clave = TxtClave.Text,
+                oRol = new Rol() { IdRol = Convert.ToInt32( ((OpcionCombo)CmbRol.SelectedItem).Valor) },
+                Estado = Convert.ToInt32(((OpcionCombo)CmbEstado.SelectedItem).Valor) == 1 ? true : false
+            };
 
-            });
+            int idUsuarioGenerado = new CN_Usuario().Registrar(usuario, out mensaje);
+
+            if (idUsuarioGenerado != 0)
+            {
+                dgvData.Rows.Add(new object[]
+                {
+                    "",
+                    TxtIdUsario.Text,
+                    TxtDocumento.Text,
+                    TxtNombreCompleto.Text,
+                    txtCorreo.Text,
+                    TxtClave.Text,
+                    ((OpcionCombo)CmbRol.SelectedItem).Valor.ToString(),
+                    ((OpcionCombo)CmbRol.SelectedItem).Texto.ToString(),
+                    ((OpcionCombo)CmbEstado.SelectedItem).Valor.ToString(),
+                    ((OpcionCombo)CmbEstado.SelectedItem).Texto.ToString()
+
+                });
+            }
+            else
+            {
+                MessageBox.Show(mensaje);
+            }
+            
             Limpiar();
         }
 
@@ -157,6 +179,11 @@ namespace SistemaVentas
 
                 }
             }
+        }
+
+        private void BtnLimpiar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
